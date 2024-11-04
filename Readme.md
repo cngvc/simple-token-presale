@@ -24,7 +24,7 @@ To run this project locally, follow these steps:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/cngvc/react-hardhat-project.git
+git clone https://github.com/cngvc/simple-token-presale.git
 ```
 
 2. Address (deployed):
