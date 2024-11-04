@@ -1,0 +1,55 @@
+const presale = [
+	{
+		_price: 10000000000000000000,
+		_nextStagePrice: 8333333000000000000,
+		_tokensToSell: 5000000000000000000000000,
+		_usdtHardcap: 500000000000,
+		_extraBonusTokens: 500000000000000000000000,
+	},
+	{
+		_price: 8333333000000000000,
+		_nextStagePrice: 7142857000000000000,
+		_tokensToSell: 5000000000000000000000000,
+		_usdtHardcap: 600000000000,
+		_extraBonusTokens: 750000000000000000000000,
+	},
+	{
+		_price: 7142857000000000000,
+		_nextStagePrice: 5882352000000000000,
+		_tokensToSell: 5000000000000000000000000,
+		_usdtHardcap: 700000000000,
+		_extraBonusTokens: 750000000000000000000000,
+	},
+	{
+		_price: 5882352000000000000,
+		_nextStagePrice: 5000000000000000000,
+		_tokensToSell: 5000000000000000000000000,
+		_usdtHardcap: 850000000000,
+		_extraBonusTokens: 750000000000000000000000,
+	},
+	{
+		_price: 5000000000000000000,
+		_nextStagePrice: 4166666000000000000,
+		_tokensToSell: 7500000000000000000000000,
+		_usdtHardcap: 1500000000000,
+		_extraBonusTokens: 1500000000000000000000000,
+	},
+	{
+		_price: 4166666000000000000,
+		_nextStagePrice: 3448275000000000000,
+		_tokensToSell: 7500000000000000000000000,
+		_usdtHardcap: 1800000000000,
+		_extraBonusTokens: 1500000000000000000000000,
+	},
+	{
+		_price: 3448275000000000000,
+		_nextStagePrice: 2000000000000000000,
+		_tokensToSell: 7500000000000000000000000,
+		_usdtHardcap: 2175000000000,
+		_extraBonusTokens: 1875000000000000000000000,
+	},
+]
+
+presale.map((e) => {
+	console.log("Token price:", 1e18 / e._price, e._tokensToSell / 1e18, e._extraBonusTokens / 1e18)
+})

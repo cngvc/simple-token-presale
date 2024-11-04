@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0, 0%, 0%;
+    --color-primary: 215 178 109;
+    --color-light-primary: 238 226 181;
+    --color-dark-primary: 202 115 115;
+    --color-black: 1 0 1;
+    --color-leon: 0 238 253;
+    --color-border-pink: 218 139 255;
+
+    --color-darker-primary: 100 75 27;
+    --color-darkest-primary: 39 29 11;
+    --color-placeholder: 62 62 62;
+  }
+
+  span {
+    @apply text-inherit;
+  }
+  html {
+    @apply scroll-smooth scrollbar-thin scrollbar-thumb-primary/80 scrollbar-track-placeholder/30;
+    @apply bg-black;
+    @apply text-white font-open-san leading-10;
+  }
+  h1 {
+    @apply text-[2.25rem] md:text-[3rem] xl:text-[3.75rem] font-bold leading-tight font-space-grotesk;
+  }
+
+  h2 {
+    @apply text-[1.25rem] md:text-[1.625rem] xl:text-[2rem] font-semibold;
+  }
+
+  p {
+    @apply font-normal text-white;
+  }
+
+  a {
+    @apply font-normal text-white;
+  }
+
+  img {
+    @apply pointer-events-none;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@layer components {
+  .t_xs {
+    @apply text-xs font-normal;
+  }
+  .t_sm {
+    @apply text-xs md:text-sm font-normal;
+  }
+  .t_base {
+    @apply text-xs md:text-sm xl:text-base font-normal xl:leading-7;
+  }
+  .t_lg {
+    @apply text-sm md:text-base xl:text-lg font-normal xl:leading-8;
+  }
+  .t_xl {
+    @apply text-base md:text-lg xl:text-xl font-normal;
+  }
+  .t_2xl {
+    @apply text-lg md:text-xl xl:text-2xl font-normal;
+  }
+  .t_32px {
+    @apply text-[1.25rem] md:text-[1.5rem] xl:text-[2rem] font-normal;
+  }
+  .t_40px {
+    @apply text-[1.25rem] md:text-[1.875rem] xl:text-[2.5rem] font-normal;
+  }
+  .b {
+    @apply font-urbanist font-semibold rounded-md bg-primary hover:bg-light-primary duration-200 text-black disabled:bg-light-primary/80 flex items-center justify-center text-center;
+  }
+  .b-outline {
+    @apply font-urbanist font-semibold rounded-md border border-primary hover:bg-primary duration-200 text-primary hover:text-black backdrop-blur flex items-center justify-center text-center;
+  }
+  .b_xs {
+    @apply b t_xs py-2 lg:px-6;
+  }
+  .b_xs_dark {
+    @apply b t_xs py-2 lg:px-6 bg-dark-primary text-light-primary hover:text-black;
+  }
+  .b_sm {
+    @apply b t_sm py-3 px-3.5 lg:px-7;
+  }
+  .b_base {
+    @apply b t_base py-3 px-6 lg:px-12;
+  }
+  .b_base_outline {
+    @apply b-outline t_base py-3 px-6 lg:px-12;
+  }
+  .b_lg {
+    @apply b t_lg lg:px-12 py-3 px-7;
+  }
+  .b_xl {
+    @apply b t_xl lg:px-12 py-3 px-7;
+  }
+
+  .hr {
+    @apply w-full h-[1px] from-border-pink/20 to-border-pink/0 bg-gradient-to-b;
+  }
+
+  .limited-content {
+    @apply relative flex flex-col mx-auto max-w-figma;
+  }
+
+  .mask-image {
+    @apply w-full h-auto z-0 pointer-events-none;
+  }
+
+  .bg_header {
+    @apply bg-black/80 backdrop-blur !border-b-primary/30;
+  }
+
+  .card {
+    @apply bg-gradient-to-b from-[#2D2D2D]/20 to-black/30 border-[0.5px] border-white/15 py-7 px-10 backdrop-blur hover:bg-dark-primary/30 duration-200 rounded;
+  }
+  .card-active {
+    @apply from-darkest-primary/70 to-black;
+  }
+
+  .nav-hover {
+    text-shadow: 0.75px 0 0 rgb(var(--color-primary));
+    color: rgb(var(--color-primary));
+  }
+
+  .process-bar-label {
+    @apply ml-3 t_xs font-bold text-black;
+  }
+}

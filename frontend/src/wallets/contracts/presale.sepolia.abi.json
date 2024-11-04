@@ -1,0 +1,589 @@
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_oracle", "type": "address" },
+      { "internalType": "address", "name": "_usdt", "type": "address" },
+      { "internalType": "uint256", "name": "_minTokenToBuy", "type": "uint256" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  { "inputs": [], "name": "AccountIsBlackListed", "type": "error" },
+  { "inputs": [], "name": "AlreadyClaimed", "type": "error" },
+  { "inputs": [], "name": "AlreadyPaused", "type": "error" },
+  { "inputs": [], "name": "ClaimIsNotEnable", "type": "error" },
+  { "inputs": [], "name": "CodeMustNotBeEmpty", "type": "error" },
+  { "inputs": [], "name": "EthPaymentFailed", "type": "error" },
+  { "inputs": [], "name": "InvalidDiscountPercentage", "type": "error" },
+  { "inputs": [], "name": "InvalidPresaleId", "type": "error" },
+  { "inputs": [], "name": "InvalidSaleAmount", "type": "error" },
+  { "inputs": [], "name": "LessThanMinAmount", "type": "error" },
+  { "inputs": [], "name": "LowBalance", "type": "error" },
+  { "inputs": [], "name": "MakeSureToAddEnoughAllowance", "type": "error" },
+  { "inputs": [], "name": "NoClaimableAmount", "type": "error" },
+  { "inputs": [], "name": "NotEnoughTokensInTheContract", "type": "error" },
+  { "inputs": [], "name": "NotPaused", "type": "error" },
+  { "inputs": [], "name": "NothingToClaim", "type": "error" },
+  {
+    "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }],
+    "name": "OwnableInvalidOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
+    "name": "OwnableUnauthorizedAccount",
+    "type": "error"
+  },
+  { "inputs": [], "name": "PleaseWaitTillNextClaim", "type": "error" },
+  { "inputs": [], "name": "PositiveBonusToken", "type": "error" },
+  { "inputs": [], "name": "PresaleDoesNotExist", "type": "error" },
+  { "inputs": [], "name": "PresaleHasBeenPaused", "type": "error" },
+  { "inputs": [], "name": "PresaleIsNotActiveYet", "type": "error" },
+  { "inputs": [], "name": "PresaleNotActive", "type": "error" },
+  { "inputs": [], "name": "PresaleTokenAddressNotSet", "type": "error" },
+  { "inputs": [], "name": "PromoCodeDoesNotExist", "type": "error" },
+  { "inputs": [], "name": "PromoCodeUsageLimitReached", "type": "error" },
+  { "inputs": [], "name": "ReentrancyGuardReentrantCall", "type": "error" },
+  { "inputs": [], "name": "StageSoldout", "type": "error" },
+  { "inputs": [], "name": "TokenPaymentFailed", "type": "error" },
+  { "inputs": [], "name": "TokenTransferFailed", "type": "error" },
+  { "inputs": [], "name": "UsageLimitMustBeGreaterThanZero", "type": "error" },
+  { "inputs": [], "name": "UserNotAParticipant", "type": "error" },
+  { "inputs": [], "name": "WaitForNextClaim", "type": "error" },
+  { "inputs": [], "name": "ZeroHardcap", "type": "error" },
+  { "inputs": [], "name": "ZeroPrice", "type": "error" },
+  { "inputs": [], "name": "ZeroTokenAddress", "type": "error" },
+  { "inputs": [], "name": "ZeroTokensToSell", "type": "error" },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_totalTokens", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_startTime", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_endTime", "type": "uint256" }
+    ],
+    "name": "PresaleCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "timestamp", "type": "uint256" }
+    ],
+    "name": "PresalePaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "timestamp", "type": "uint256" }
+    ],
+    "name": "PresaleUnpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "string", "name": "code", "type": "string" },
+      { "indexed": false, "internalType": "uint256", "name": "usageLimit", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "discountPercentage", "type": "uint256" }
+    ],
+    "name": "PromoCodeCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "purchaseToken", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "tokensBought", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "amountPaid", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "timestamp", "type": "uint256" }
+    ],
+    "name": "TokensBought",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "USDTInterface",
+    "outputs": [{ "internalType": "contract IERC20Metadata", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "bool", "name": "_value", "type": "bool" }
+    ],
+    "name": "blackListUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "blockStamp",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "promoCode", "type": "string" }],
+    "name": "buyWithEth",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "usdAmount", "type": "uint256" },
+      { "internalType": "string", "name": "promoCode", "type": "string" }
+    ],
+    "name": "buyWithUSDT",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_oldAddress", "type": "address" },
+      { "internalType": "address", "name": "_newWallet", "type": "address" }
+    ],
+    "name": "changeClaimAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_wallet", "type": "address" }],
+    "name": "changeFundWallet",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }],
+    "name": "changeMinTokenToBuy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_oracle", "type": "address" }],
+    "name": "changeOracleAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_token", "type": "address" }],
+    "name": "changeTokenToSell",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_newAddress", "type": "address" }],
+    "name": "changeUSDTToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }],
+    "name": "claimAmount",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "uint256", "name": "_id", "type": "uint256" }
+    ],
+    "name": "claimableAmount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_price", "type": "uint256" },
+      { "internalType": "uint256", "name": "_nextStagePrice", "type": "uint256" },
+      { "internalType": "uint256", "name": "_tokensToSell", "type": "uint256" },
+      { "internalType": "uint256", "name": "_usdtHardcap", "type": "uint256" },
+      { "internalType": "uint256", "name": "_extraBonusTokens", "type": "uint256" }
+    ],
+    "name": "createPresale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "code", "type": "string" },
+      { "internalType": "uint256", "name": "usageLimit", "type": "uint256" },
+      { "internalType": "uint256", "name": "discountPercentage", "type": "uint256" }
+    ],
+    "name": "createPromoCode",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "currentSale",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "code", "type": "string" }],
+    "name": "disablePromoCode",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "internalType": "bool", "name": "_status", "type": "bool" }
+    ],
+    "name": "enableClaim",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "ethBuyHelper",
+    "outputs": [{ "internalType": "uint256", "name": "ethAmount", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "ethToTokens",
+    "outputs": [{ "internalType": "uint256", "name": "_tokens", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "bool", "name": "_status", "type": "bool" }
+    ],
+    "name": "excludeAccountFromMinBuy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fundReceiver",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getActivePromoCodes",
+    "outputs": [{ "internalType": "string[]", "name": "", "type": "string[]" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getLatestPrice",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "isBlackList",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "isExcludeMinToken",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "isExist",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minTokenToBuy",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "overallRaised",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }],
+    "name": "pausePresale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "paused",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "presale",
+    "outputs": [
+      { "internalType": "uint256", "name": "startTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "endTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" },
+      { "internalType": "uint256", "name": "nextStagePrice", "type": "uint256" },
+      { "internalType": "uint256", "name": "sold", "type": "uint256" },
+      { "internalType": "uint256", "name": "tokensToSell", "type": "uint256" },
+      { "internalType": "uint256", "name": "usdtHardcap", "type": "uint256" },
+      { "internalType": "uint256", "name": "amountRaised", "type": "uint256" },
+      { "internalType": "bool", "name": "active", "type": "bool" },
+      { "internalType": "bool", "name": "isEnableClaim", "type": "bool" },
+      { "internalType": "uint256", "name": "soldBonusTokens", "type": "uint256" },
+      { "internalType": "uint256", "name": "extraBonusTokens", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "presaleId",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "promoCodeKeys",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "name": "promoCodes",
+    "outputs": [
+      { "internalType": "uint256", "name": "usageLimit", "type": "uint256" },
+      { "internalType": "uint256", "name": "usageCount", "type": "uint256" },
+      { "internalType": "uint256", "name": "discountPercentage", "type": "uint256" },
+      { "internalType": "bool", "name": "active", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [],
+    "name": "saleToken",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }],
+    "name": "setPresaleStage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256[]", "name": "_id", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "vestingStartTime", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "_initialClaimPercent", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "_vestingTime", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "_vestingPercentage", "type": "uint256[]" }
+    ],
+    "name": "setPresaleVesting",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }],
+    "name": "unPausePresale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "uniqueBuyers",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "internalType": "uint256", "name": "_price", "type": "uint256" },
+      { "internalType": "uint256", "name": "_nextStagePrice", "type": "uint256" },
+      { "internalType": "uint256", "name": "_tokensToSell", "type": "uint256" },
+      { "internalType": "uint256", "name": "_hardcap", "type": "uint256" },
+      { "internalType": "bool", "name": "isClaimable", "type": "bool" },
+      { "internalType": "uint256", "name": "_extraBonusTokens", "type": "uint256" }
+    ],
+    "name": "updatePresale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "internalType": "uint256", "name": "_vestingStartTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "_initialClaimPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "_vestingTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "_vestingPercentage", "type": "uint256" }
+    ],
+    "name": "updatePresaleVesting",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "code", "type": "string" },
+      { "internalType": "uint256", "name": "usageLimit", "type": "uint256" },
+      { "internalType": "uint256", "name": "discountPercentage", "type": "uint256" },
+      { "internalType": "bool", "name": "isActive", "type": "bool" }
+    ],
+    "name": "updatePromoCode",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "usdtBuyHelper",
+    "outputs": [{ "internalType": "uint256", "name": "usdPrice", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "usdtToTokens",
+    "outputs": [{ "internalType": "uint256", "name": "_tokens", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "userClaimData",
+    "outputs": [
+      { "internalType": "uint256", "name": "investedAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "claimAt", "type": "uint256" },
+      { "internalType": "uint256", "name": "claimAbleAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "claimedVestingAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "claimedAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "claimCount", "type": "uint256" },
+      { "internalType": "uint256", "name": "activePercentAmount", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "code", "type": "string" }],
+    "name": "validatePromoCode",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "vesting",
+    "outputs": [
+      { "internalType": "uint256", "name": "vestingStartTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "initialClaimPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "vestingTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "vestingPercentage", "type": "uint256" },
+      { "internalType": "uint256", "name": "totalClaimCycles", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }],
+    "name": "withdrawContractFunds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "withdrawTokens",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

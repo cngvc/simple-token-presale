@@ -1,0 +1,11 @@
+const env = await import.meta.env
+
+export const {
+  VITE_WALLET_CONNECT_PROJECT_ID,
+  VITE_ALCHEMY_KEY,
+  VITE_PRESALE_ADDRESS,
+  VITE_USDT_ETH_ADDRESS,
+  VITE_TOKEN_ADDRESS,
+  VITE_ETH_EXPLORER,
+  VITE_IPAPI_KEY
+} = env
