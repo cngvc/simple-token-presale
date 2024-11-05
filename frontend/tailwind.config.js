@@ -18,7 +18,6 @@ export default {
         primary: 'rgb(var(--color-primary))',
         leon: 'rgb(var(--color-leon))',
         placeholder: 'rgb(var(--color-placeholder))',
-        'border-pink': 'rgb(var(--color-border-pink))',
         'dark-primary': 'rgb(var(--color-dark-primary))',
         'light-primary': 'rgb(var(--color-light-primary))',
         'darker-primary': 'rgb(var(--color-darker-primary))',

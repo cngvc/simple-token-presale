@@ -4,7 +4,7 @@ const TextLoading = ({ title }: { title: string }) => {
       <div role='status'>
         <svg
           aria-hidden='true'
-          className='w-4 h-4 me-2 text-border-pink/20 animate-spin fill-primary'
+          className='w-4 h-4 me-2 text-light-primary/20 animate-spin fill-primary'
           viewBox='0 0 100 101'
           fill='none'
           xmlns='http://www.w3.org/2000/svg'

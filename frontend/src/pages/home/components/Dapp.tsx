@@ -427,7 +427,7 @@ export const Dapp = () => {
               }}
               key={index}
               className={twMerge(
-                'gap-2 flex px-3 py-2 rounded-md w-full border border-border-pink bg-white items-center justify-center',
+                'gap-2 flex px-3 py-2 rounded-md w-full border border-light-primary bg-white items-center justify-center',
                 isSelected && 'bg-primary'
               )}
             >

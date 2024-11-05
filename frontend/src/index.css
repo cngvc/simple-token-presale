@@ -11,7 +11,6 @@
     --color-dark-primary: 202 115 115;
     --color-black: 1 0 1;
     --color-leon: 0 238 253;
-    --color-border-pink: 218 139 255;
 
     --color-darker-primary: 100 75 27;
     --color-darkest-primary: 39 29 11;
@@ -107,7 +106,7 @@
   }
 
   .hr {
-    @apply w-full h-[1px] from-border-pink/20 to-border-pink/0 bg-gradient-to-b;
+    @apply w-full h-[1px] from-light-primary/20 to-light-primary/0 bg-gradient-to-b;
   }
 
   .limited-content {

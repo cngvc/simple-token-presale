@@ -74,7 +74,7 @@ const FAQItem = ({ title, description }: { title: string; description: string })
       onClick={() => setShowingAnswer((prev) => !prev)}
       className={twMerge(
         'w-full py-3 px-8 cursor-pointer duration-200 ease-in-out bg-gradient-to-b border-[0.5px] border-white/30',
-        isShowingAnswer && 'py-8 from-dark-primary/70 to-black border-border-pink/30 rounded-md'
+        isShowingAnswer && 'py-8 from-darkest-primary/70 to-black border-light-primary/30 rounded-md'
       )}
     >
       <div className='grid grid-cols-[1fr_auto] items-center'>

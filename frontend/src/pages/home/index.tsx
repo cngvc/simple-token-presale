@@ -12,6 +12,7 @@ const Home = () => {
           <div className='block absolute h-full w-1/12 inset-y-0 left-0 bg-gradient-to-r from-black to-transparent'></div>
           <div className='block absolute h-full w-1/12 inset-y-0 right-0 bg-gradient-to-l from-black to-transparent'></div>
           <div className='block absolute h-1/6 inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent'></div>
+          <div className='block absolute h-1/6 inset-x-0 top-0 bg-gradient-to-b from-black to-transparent'></div>
         </div>
         <Banner />
       </div>
